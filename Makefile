@@ -28,8 +28,8 @@ dist: dist-clean
 	mkdir -p dist/linux/armhf  && GOOS=linux GOARCH=arm GOARM=6 go build -ldflags "$(LDFLAGS)" -o dist/linux/armhf/docker-gen ./cmd/docker-gen
 	mkdir -p dist/darwin/amd64 && GOOS=darwin GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o dist/darwin/amd64/docker-gen ./cmd/docker-gen
 	mkdir -p dist/darwin/i386  && GOOS=darwin GOARCH=386 go build -ldflags "$(LDFLAGS)" -o dist/darwin/i386/docker-gen ./cmd/docker-gen
-	mkdir -p dist/windows/i386  && GOOS=windows GOARCH=386 go build -ldflags "$(LDFLAGS)" -o dist/windows/i386/docker-gen ./cmd/docker-gen
-	mkdir -p dist/windows/amd64  && GOOS=windows GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o dist/windows/amd64/docker-gen ./cmd/docker-gen
+	mkdir -p dist/windows/i386  && GOOS=windows GOARCH=386 go build -ldflags "$(LDFLAGS)" -o dist/windows/i386/docker-gen.exe ./cmd/docker-gen
+	mkdir -p dist/windows/amd64  && GOOS=windows GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o dist/windows/amd64/docker-gen.exe ./cmd/docker-gen
 
 
 release: dist
