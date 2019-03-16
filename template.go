@@ -516,29 +516,53 @@ func GenerateFile(config Config, containers Context) bool {
 			log.Fatalf("Failed to write to temp file: wrote %d, exp %d, err=%v", n, len(contents), err)
 		}
 
-		oldContents := []byte{}
+		/*oldContents := []byte{}
 		if fi, err := os.Stat(config.Dest); err == nil {
 			if err := dest.Chmod(fi.Mode()); err != nil {
 				log.Fatalf("Unable to chmod temp file: %s\n", err)
 			}
-			/*if err := dest.Chown(int(fi.Sys().(*syscall.Stat_t).Uid), int(fi.Sys().(*syscall.Stat_t).Gid)); err != nil {
+			if err := dest.Chown(int(fi.Sys().(*syscall.Stat_t).Uid), int(fi.Sys().(*syscall.Stat_t).Gid)); err != nil {
 				log.Fatalf("Unable to chown temp file: %s\n", err)
-			}*/
+			}
 			oldContents, err = ioutil.ReadFile(config.Dest)
 			if err != nil {
 				log.Fatalf("Unable to compare current file contents: %s: %s\n", config.Dest, err)
 			}
-		}
+		}*/
 
-		if bytes.Compare(oldContents, contents) != 0 {
-			err = os.Rename(dest.Name(), config.Dest)
+		//if bytes.Compare(oldContents, contents) != 0 {
+			err = os.Remove(config.Dest)
+			if err != nil {
+				log.Fatalf("Unable to remove dest file %s: %s\n", config.Dest, err)
+			}
+
+			// copy instead of rename
+			source, err := os.Open(dest.Name())
+			if err != nil {
+				log.Fatalf("Unable to read temp file %s: %s\n", dest.Name(), err)
+			}
+			defer source.Close()
+	
+			destination, err := os.Create(config.Dest)
 			if err != nil {
 				log.Fatalf("Unable to create dest file %s: %s\n", config.Dest, err)
 			}
+			defer destination.Close()
+			nBytes, err := io.Copy(destination, source)
+			if err != nil {
+				log.Fatalf("Unable to copy to dest file %s: %s\n", config.Dest, err)
+			}
+			log.Printf("Copied %d Bytes", nBytes)
+
+			/*err = os.Rename(dest.Name(), config.Dest)
+			if err != nil {
+				log.Fatalf("Unable to create dest file %s: %s\n", config.Dest, err)
+			}*/
+			
 			log.Printf("Generated '%s' from %d containers", config.Dest, len(filteredContainers))
 			return true
-		}
-		return false
+		//}
+		//return false
 	} else {
 		os.Stdout.Write(contents)
 	}
