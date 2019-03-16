@@ -310,7 +310,7 @@ func (g *generator) runNotifyCmd(config Config) {
 	}
 
 	log.Printf("Running '%s'", config.NotifyCmd)
-	cmd := exec.Command("/bin/sh", "-c", config.NotifyCmd)
+	cmd := exec.Command("cmd.exe", "/C /S", config.NotifyCmd)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Error running notify command: %s, %s\n", config.NotifyCmd, err)
