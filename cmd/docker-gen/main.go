@@ -83,7 +83,7 @@ func initFlags() {
 
 	certPath := filepath.Join(os.Getenv("DOCKER_CERT_PATH"))
 	if certPath == "" {
-		certPath = filepath.Join(os.Getenv("HOME"), ".docker")
+		certPath = filepath.Join(os.Getenv("USERPROFILE"), ".docker")
 	}
 	flag.BoolVar(&version, "version", false, "show version")
 	flag.BoolVar(&watch, "watch", false, "watch for container changes")
