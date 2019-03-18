@@ -1,7 +1,7 @@
 package dockergen
 
 import (
-	"bufio"
+//	"bufio"
 	"os"
 	"regexp"
 	"sync"
@@ -159,7 +159,14 @@ type Docker struct {
 }
 
 func GetCurrentContainerID() string {
-	file, err := os.Open("/proc/self/cgroup")
+	id, err := os.Hostname()
+
+	if err != nil {
+		return ""
+	}
+
+	return id
+	/*file, err := os.Open("/proc/self/cgroup")
 
 	if err != nil {
 		return ""
@@ -181,7 +188,7 @@ func GetCurrentContainerID() string {
 		}
 	}
 
-	return ""
+	return ""*/
 }
 
 func matchDockerCurrentContainerID(lines string) string {

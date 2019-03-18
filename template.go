@@ -138,12 +138,12 @@ func generalizedWhere(funcName string, entries interface{}, key string, test fun
 
 	selection := make([]interface{}, 0)
 	for i := 0; i < entriesVal.Len(); i++ {
-		v := reflect.Indirect(entriesVal.Index(i)).Interface()
-
-		value := deepGet(v, key)
+		reflectValue := reflect.Indirect(entriesVal.Index(i))
+		v := reflectValue.Interface()
+		
 		if test(value) {
 			selection = append(selection, v)
-		}
+		} 
 	}
 
 	return selection, nil
@@ -152,6 +152,7 @@ func generalizedWhere(funcName string, entries interface{}, key string, test fun
 // selects entries based on key
 func where(entries interface{}, key string, cmp interface{}) (interface{}, error) {
 	return generalizedWhere("where", entries, key, func(value interface{}) bool {
+		
 		return reflect.DeepEqual(value, cmp)
 	})
 }
