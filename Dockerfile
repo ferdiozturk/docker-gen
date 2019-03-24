@@ -1,3 +1,4 @@
+#FROM mcr.microsoft.com/windows/nanoserver:latest
 FROM mcr.microsoft.com/windows/nanoserver/insider:10.0.18356.1
 LABEL maintainer="Ferdi Oeztuerk foerdi@gmail.com"
 

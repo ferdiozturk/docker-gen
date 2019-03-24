@@ -140,19 +140,33 @@ func generalizedWhere(funcName string, entries interface{}, key string, test fun
 	for i := 0; i < entriesVal.Len(); i++ {
 		reflectValue := reflect.Indirect(entriesVal.Index(i))
 		v := reflectValue.Interface()
-		
+
+		value := deepGet(v, key)
+
 		if test(value) {
 			selection = append(selection, v)
-		} 
+		}
 	}
 
 	return selection, nil
 }
 
+// selects entries based on key and value containing
+func whereContains(entries interface{}, key string, cmp interface{}) (interface{}, error) {
+	return generalizedWhere("where", entries, key, func(value interface{}) bool {
+		log.Printf("key: %v", key)
+		log.Printf("cmp: %v", cmp)
+		log.Printf("value: %v", value)
+		if strings.Contains(value.(string), cmp.(string)) {
+			return true
+		}
+		return false
+	})
+}
+
 // selects entries based on key
 func where(entries interface{}, key string, cmp interface{}) (interface{}, error) {
 	return generalizedWhere("where", entries, key, func(value interface{}) bool {
-		
 		return reflect.DeepEqual(value, cmp)
 	})
 }
@@ -451,6 +465,7 @@ func newTemplate(name string) *template.Template {
 		"when":                   when,
 		"where":                  where,
 		"whereNot":               whereNot,
+		"whereContains":          whereContains,
 		"whereExist":             whereExist,
 		"whereNotExist":          whereNotExist,
 		"whereAny":               whereAny,
