@@ -1,7 +1,5 @@
 {{ $CurrentContainer := whereContains $ "ID" .Docker.CurrentContainerID | first}}
 
-#{{ $CurrentContainer }}
-
 worker_processes  auto;
 error_log  C:/nginx/logs/error.log;
 #error_log  logs/debug.log debug;
